@@ -1,0 +1,14 @@
+{
+  "routerMap": [
+    {
+      "name": "Login",
+      "pageSourceFile": "src/main/ets/pages/auth/Login.ets",
+      "buildFunction": "LoginBuilder"
+    },
+    {
+      "name": "Register",
+      "pageSourceFile": "src/main/ets/pages/auth/Register.ets",
+      "buildFunction": "RegisterBuilder"
+    }
+  ]
+}

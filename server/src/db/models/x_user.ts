@@ -64,7 +64,7 @@ export class XUserModel extends Model<InferAttributes<XUserModel>, InferCreation
   declare name?: string;
   declare nickname: string;
   declare account: string;
-  declare password: string;
+  declare password?: string;
   declare phone?: string;
   declare sex?: number;
   declare type?: number;

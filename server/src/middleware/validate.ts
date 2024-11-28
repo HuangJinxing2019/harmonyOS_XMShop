@@ -1,12 +1,12 @@
-import {NextFunction, Request, Response} from "express";
-import {RegisterBody, RegisterSchema} from "../enter/AuthSchema";
+import { NextFunction, Request, Response } from "express";
+import { RegisterBody } from "../entitiy";
 import { PARAMS_ERROR } from "../config/error_config";
 import { z } from 'zod'
 
 export function validateRequestBody(schema: z.ZodSchema){
   return function (req: Request<{}, {}, RegisterBody>, res: Response, next: NextFunction){
     try {
-      req.body = RegisterSchema.parse(req.body);
+      req.body = schema.parse(req.body);
       next();
     } catch (err) {
       if(err instanceof z.ZodError){

@@ -1,13 +1,13 @@
 import { Router, Request, Response } from "express";
-import authController from "../../controller/auth";
+import authController from "../../controller/auth/AuthController";
 import { validateRequestBody } from "../../middleware/validate";
-import { RegisterSchema } from "../../enter/AuthSchema";
+import { RegisterSchema, LoginSchema } from "../../entitiy";
 
 const router = Router();
 
 router.post('/auth/register', validateRequestBody(RegisterSchema), authController.register)
 
-router.post('/auth/login', authController.login)
+router.post('/auth/login', validateRequestBody(LoginSchema), authController.login)
 
 router.post('/auth/logout', authController.logout)
 

@@ -1,13 +1,6 @@
 import { useForm, BasicForm, FormSchema, ComponentType, FormData } from '../../components/basicForm/Index'
-import { JSON } from '@kit.ArkTS'
-
-
-@Builder
-export  function LoginBuilder(){
-  Login()
-}
 @ComponentV2
-struct Login{
+struct Demo{
   aboutToAppear(): void {
     this.formData  = useForm({
       schema: [

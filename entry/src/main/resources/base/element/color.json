@@ -5,6 +5,10 @@
       "value": "#FFFFFF"
     },
     {
+      "name": "warning",
+      "value": "#ffd94838"
+    },
+    {
       "name": "font_primary",
       "value": "#ff6700"
     },
@@ -23,6 +27,26 @@
     {
       "name": "font_fourth",
       "value": "#33000000"
+    },
+    {
+      "name": "background_primary",
+      "value": "#ffffffff"
+    },
+    {
+      "name": "background_secondary",
+      "value": "#fff1f3f5"
+    },
+    {
+      "name": "background_tertiary",
+      "value": "#ffe5e5ea"
+    },
+    {
+      "name": "background_fourth",
+      "value": "#ffd1d1d6"
+    },
+    {
+      "name": "background_message",
+      "value": "#fc6902"
     }
   ]
 }

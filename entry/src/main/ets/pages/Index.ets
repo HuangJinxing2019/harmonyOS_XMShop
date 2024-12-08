@@ -10,7 +10,7 @@ struct Index {
 
   build() {
     Navigation(this.navPageInfos){
-      Tabs({ index: 0, barPosition: BarPosition.End }){
+      Tabs({ index: 1, barPosition: BarPosition.End }){
         ForEach(toolBarList, (item: ToolBarItem) => {
           TabContent(){
             if(item.text === '首页'){

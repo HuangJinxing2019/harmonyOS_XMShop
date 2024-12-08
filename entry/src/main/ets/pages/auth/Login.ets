@@ -1,56 +1,134 @@
-import { useForm, BasicForm, FormSchema, ComponentType, FormData } from '../../components/basicForm/Index'
-import { JSON } from '@kit.ArkTS'
-
+import { REG_EMAIL, REG_MOBILE, REG_PWD } from '../../libs/reggular';
+import { Agreement } from './Components/Agreement'
+import { promptAction } from '@kit.ArkUI';
 
 @Builder
 export  function LoginBuilder(){
   Login()
 }
+
 @ComponentV2
 struct Login{
-  aboutToAppear(): void {
-    this.formData  = useForm({
-      schema: [
-        {
-          filed: 'account',
-          label: '登录',
-          options: {
-            text: '123',
-            placeholder: '请输入账号'
-          },
-          required: true,
-          component: ComponentType.TEXT_INPUT,
-          componentProps: {
-            onChange(value: string){
-              console.log(value)
-            }
-          }
-        },
-        {
-          filed: 'password',
-          label: '密码',
-          options: {
-            text: '123',
-            placeholder: '请输入密码'
-          },
-          required: false,
-          component: ComponentType.TEXT_INPUT,
-        }
-      ]
-    })
-    this.formSchema = this.formData.value;
-  }
   @Consumer('NavPathStack') navPageInfos: NavPathStack = new NavPathStack();
-  formData: FormData = new FormData();
-  formSchema: FormSchema[] = []
+
   build() {
     NavDestination(){
-      Text('登录页面')
-      BasicForm({ schema: this.formSchema })
-      Button('提交')
-        .onClick(() => {
-          this.formData.validate();
-        })
+      Column(){
+        Image($r('app.media.logo'))
+          .width(60)
+          .height(60)
+          .margin({ top: 100 })
+        Text('让每个人都能享受科技的乐意')
+          .fontColor($r('app.color.font_secondary'))
+          .margin({ top: 10 })
+        LoginFormComponent()
+        Row(){
+          Text('没有账号，去注册>>')
+            .fontSize(14)
+            .fontColor($r('app.color.font_primary'))
+            .onClick(() => {
+              this.navPageInfos.pushPath({ name: 'Register' })
+            })
+        }
+        .width('100%')
+        .margin({ top: 10 })
+        .justifyContent(FlexAlign.End)
+        .padding({ right: 30 })
+      }
     }
+    .title('小米账号登录')
   }
 }
+
+
+@ObservedV2
+class LoginForm{
+  @Trace account: string | undefined = undefined;
+  @Trace password: string | undefined = undefined;
+}
+
+@ComponentV2
+struct LoginFormComponent{
+  @Consumer('NavPathStack') navPageInfos: NavPathStack = new NavPathStack();
+  @Local loginForm: LoginForm = new LoginForm();
+  @Local isAgreement: boolean = false;
+  @Local accountErrorText: string = '';
+  @Local pwsErrorText: string = '';
+
+  login(){
+    if(!this.isAgreement){
+      promptAction.showToast({ message: '请阅读协议' })
+      return
+    }
+    if(!this.validForm()){
+      promptAction.showToast({ message: '输入有误' })
+      return
+    }
+    promptAction.showToast({ message: '登录成功' })
+
+  }
+  validForm(){
+    let flag: boolean = true;
+    const loginForm = this.loginForm
+    if(!loginForm.account){
+      this.accountErrorText = '请输入登录账号'
+      flag = false
+    } else if(!REG_MOBILE.test(loginForm.account) && !REG_EMAIL.test(loginForm.account)){
+      this.accountErrorText = '请输入合法的邮箱或手机号'
+      flag = false
+    } else {
+      this.accountErrorText = '';
+    }
+    if(!loginForm.password){
+      this.pwsErrorText = '请输入登录密码'
+      flag = false
+    } else if(!REG_PWD.test(loginForm.password)){
+      this.pwsErrorText = '请输入8~16的字符，包含大小写字母、特殊字符'
+      flag = false
+    } else {
+      this.pwsErrorText = '';
+    }
+    return flag
+  }
+
+  build() {
+    Column(){
+      TextInput({
+        placeholder: '请输入邮箱或手机号',
+        text: this.loginForm.account
+      })
+        .showError(this.accountErrorText)
+        .height(50)
+        .onChange((val: string) => this.loginForm.account = val)
+      TextInput({
+        placeholder: '请输入登录密码',
+        text: this.loginForm.password
+      })
+        .type(InputType.Password)
+        .showPassword(false)
+        .showError(this.pwsErrorText)
+        .height(50)
+        .margin({ top: 10 })
+        .onChange((val: string) => this.loginForm.password = val)
+      Row(){
+        Checkbox()
+          .select(this.isAgreement)
+          .onChange((val: boolean) => this.isAgreement = val)
+        Agreement()
+          .onClick(() => {
+            this.isAgreement = !this.isAgreement
+          })
+      }
+      .margin({ top: 20 })
+      Button('登录')
+        .width('100%')
+        .height(50)
+        .margin({ top: 30 })
+        .onClick(() => {
+          this.login()
+        })
+    }
+    .padding({ left: 30, right: 30, top: 30 })
+  }
+}
+

@@ -3,6 +3,26 @@
     {
       "name": "start_window_background",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "font_primary",
+      "value": "#ff6700"
+    },
+    {
+      "name": "font_first",
+      "value": "#e5000000"
+    },
+    {
+      "name": "font_secondary",
+      "value": "#99000000"
+    },
+    {
+      "name": "font_tertiary",
+      "value": "#66000000"
+    },
+    {
+      "name": "font_fourth",
+      "value": "#33000000"
     }
   ]
 }

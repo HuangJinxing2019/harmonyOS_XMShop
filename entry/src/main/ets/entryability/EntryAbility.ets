@@ -17,7 +17,6 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
-
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
         hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
@@ -25,6 +24,12 @@ export default class EntryAbility extends UIAbility {
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
     });
+    window.getLastWindow(this.context, (err, windowClass) => {
+      console.log('获取状态栏信息-系统默认区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)))
+      console.log('获取状态栏信息-刘海屏高度' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_CUTOUT)))
+      console.log('获取状态栏信息-手势区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM_GESTURE)))
+      console.log('获取状态栏信息-导航条区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)))
+    })
   }
 
   onWindowStageDestroy(): void {

@@ -2,15 +2,20 @@ import { toolBarList, ToolBarItem } from '../config/index'
 import { Home } from '../components/toobar/Home'
 import { My } from '../components/toobar/My'
 import { PRIMARY_COLOR } from '../config/style_config'
+import { window } from '@kit.ArkUI';
 
 @Entry
 @ComponentV2
 struct Index {
   @Provider('NavPathStack') navPageInfos: NavPathStack = new NavPathStack();
-
+  aboutToAppear(): void {
+    window.getLastWindow(getContext(), (err, windowClass) => {
+      windowClass.setWindowLayoutFullScreen(true)
+    })
+  }
   build() {
     Navigation(this.navPageInfos){
-      Tabs({ index: 1, barPosition: BarPosition.End }){
+      Tabs({ index: 0, barPosition: BarPosition.End }){
         ForEach(toolBarList, (item: ToolBarItem) => {
           TabContent(){
             if(item.text === '首页'){

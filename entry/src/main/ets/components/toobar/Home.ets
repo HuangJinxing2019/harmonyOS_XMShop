@@ -4,7 +4,7 @@ export struct Home {
     Column() {
       Column()
         .width('100%')
-        .height(36)
+        .height('126px')
         .backgroundColor(Color.Blue)
       Text('首页')
     }

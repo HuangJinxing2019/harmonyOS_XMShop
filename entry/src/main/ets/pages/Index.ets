@@ -9,9 +9,7 @@ import { window } from '@kit.ArkUI';
 struct Index {
   @Provider('NavPathStack') navPageInfos: NavPathStack = new NavPathStack();
   aboutToAppear(): void {
-    window.getLastWindow(getContext(), (err, windowClass) => {
-      windowClass.setWindowLayoutFullScreen(true)
-    })
+
   }
   build() {
     Navigation(this.navPageInfos){

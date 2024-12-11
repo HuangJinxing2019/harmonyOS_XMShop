@@ -8,7 +8,6 @@ class customColors implements CustomColors {
 
 class PageCustomTheme implements CustomTheme {
   colors?: CustomColors;
-
   constructor(colors: CustomColors) {
     this.colors = colors;
   }

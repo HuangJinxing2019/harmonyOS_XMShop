@@ -10,6 +10,9 @@ export struct My {
         Column() {
           // 用户信息
           UserInfoComponent()
+            .onClick(() => {
+              this.navPageInfos.pushPath({ name: 'Login' })
+            })
           // 抽奖入口
           LotteryComponent()
           // 会员入口

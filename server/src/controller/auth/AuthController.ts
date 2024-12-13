@@ -9,6 +9,7 @@ import { LoginInfo, ResLoginData } from "../../entitiy";
 export class AuthController{
   // 登录
   async login(req: Request<{}, {}, LoginBody>, res: Response<ResLoginData>){
+    console.log('执行登录')
     try {
       const { account, password } = req.body
       const user = await userService.findAccount(account)

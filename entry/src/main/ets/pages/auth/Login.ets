@@ -1,6 +1,7 @@
 import { REG_EMAIL, REG_MOBILE, REG_PWD } from '../../libs/reggular';
 import { Agreement } from './Components/Agreement'
 import { promptAction } from '@kit.ArkUI';
+import { login } from '../../apis/auth'
 
 @Builder
 export  function LoginBuilder(){
@@ -47,6 +48,10 @@ class LoginForm{
   @Trace password: string | undefined = undefined;
 }
 
+interface LoginInfo{
+  token: string;
+}
+
 @ComponentV2
 struct LoginFormComponent{
   @Consumer('NavPathStack') navPageInfos: NavPathStack = new NavPathStack();
@@ -55,7 +60,7 @@ struct LoginFormComponent{
   @Local accountErrorText: string = '';
   @Local pwsErrorText: string = '';
 
-  login(){
+  async login(){
     if(!this.isAgreement){
       promptAction.showToast({ message: '请阅读协议' })
       return
@@ -64,8 +69,14 @@ struct LoginFormComponent{
       promptAction.showToast({ message: '输入有误' })
       return
     }
-    promptAction.showToast({ message: '登录成功' })
-
+    const params: LoginForm = {
+      account: this.loginForm.account,
+      password: this.loginForm.password
+    };
+    const loginInfo = await login<LoginInfo>(params);
+    console.log('登录信息' + JSON.stringify(loginInfo))
+    promptAction.showToast({ message: '登录成功' });
+    this.navPageInfos.pop();
   }
   validForm(){
     let flag: boolean = true;

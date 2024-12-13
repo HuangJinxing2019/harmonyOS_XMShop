@@ -1,7 +1,7 @@
 {
   "app": {
     "bundleName": "com.example.harmonyos_xmsgop",
-    "patchVersionCode": 2000581,
+    "patchVersionCode": 2000602,
     "versionCode": 1000000
   },
   "module": {

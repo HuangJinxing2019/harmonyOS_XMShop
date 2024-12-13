@@ -1,9 +1,15 @@
 import { http } from '@kit.NetworkKit';
 import { mergeObject } from './utils'
 import qs from 'qs'
+import { promptAction } from '@kit.ArkUI';
 
 interface PostRequestData{
   params: object
+}
+export interface ResultData<T>{
+  code: number;
+  msg: string;
+  data: T
 }
 
 class HttpRequest{
@@ -17,9 +23,30 @@ class HttpRequest{
         return this;
       }
   }
-  public async get(url: string, config?: http.HttpRequestOptions): Promise<http.HttpResponse>{
+  private beforRequest(url: string, config?: http.HttpRequestOptions){
+
+  }
+
+  private async afterRequest<T>(url: string, response: http.HttpResponse): Promise<ResultData<T>>{
+    this.requestMap.delete(url)
+    if(response.responseCode === 200){
+      if((response.result as ResultData<T>).code === 200){
+        return Promise.resolve(response.result as ResultData<T>)
+      } else {
+        promptAction.showToast({
+          message: (response.result as ResultData<T>).msg,
+          textColor: Color.Red
+        })
+        return Promise.reject(response.result as ResultData<T>)
+      }
+    } else {
+      return Promise.reject(response)
+    }
+  }
+  public async get<T>(url: string, config?: http.HttpRequestOptions): Promise<ResultData<T>>{
     let _config: http.HttpRequestOptions = {
       method: http.RequestMethod.GET,
+      expectDataType: http.HttpDataType.OBJECT,
     }
     // 有传config参数，进行合并。
     if(config){
@@ -28,48 +55,47 @@ class HttpRequest{
     return this.request(url, _config)
   }
 
-  public async post(url: string, data: Object | PostRequestData | ArrayBuffer, config?: http.HttpRequestOptions): Promise<http.HttpResponse>{
+  public async post<T>(url: string, data: Object | PostRequestData | ArrayBuffer, config?: http.HttpRequestOptions): Promise<ResultData<T>>{
     if(Object.keys(data).includes('params')){
-      return this.formPost(url, (data as PostRequestData).params, config)
+      return this.formPost<T>(url, (data as PostRequestData).params, config)
     } else {
-      return this.jsonPost(url, data, config)
+      return this.jsonPost<T>(url, data, config)
     }
   }
-  public async jsonPost(url: string, data: Object, config?: http.HttpRequestOptions): Promise<http.HttpResponse>{
+  public async jsonPost<T>(url: string, data: Object, config?: http.HttpRequestOptions): Promise<ResultData<T>>{
     let _config: http.HttpRequestOptions = {
       method: http.RequestMethod.POST,
+      expectDataType: http.HttpDataType.OBJECT,
       header: { 'content-Type': 'application/json' },
     }
     _config.extraData = data;
     if(config) _config = mergeObject(_config, config)
-    this.request(url, _config)
+    return this.request(url, _config)
   }
-  public async formPost(url: string, data: object, config?: http.HttpRequestOptions): Promise<http.HttpResponse>{
+  public async formPost<T>(url: string, data: object, config?: http.HttpRequestOptions): Promise<ResultData<T>>{
     let _config: http.HttpRequestOptions = {
       method: http.RequestMethod.POST,
+      expectDataType: http.HttpDataType.OBJECT,
       header: { 'content-Type': 'application/x-www-form-urlencoded'},
     }
     _config.extraData = qs.stringify((data as PostRequestData).params)
     if(config) _config = mergeObject(_config, config)
-    this.request(url, _config)
+    return this.request<T>(url, _config)
   }
-  public async request(url: string, config?: http.HttpRequestOptions): Promise<http.HttpResponse>{
+  public async request<T>(url: string, config?: http.HttpRequestOptions): Promise<ResultData<T>>{
     const httpRequest = http.createHttp()
     this.beforRequest(url, config)
     this.requestMap.set(url, httpRequest)
     return httpRequest.request(url, config)
       .then((response: http.HttpResponse) => {
-        this.afterRequest(url, response)
-        return response
+        return this.afterRequest(url, response as http.HttpResponse) as Promise<ResultData<T>>
+      }).catch((err: Record<string, string>)=> {
+        promptAction.showToast({
+          message: err.message,
+          textColor: Color.Red
+        })
+        return Promise.reject(err)
       })
-  }
-  private beforRequest(url: string, config?: http.HttpRequestOptions){
-
-  }
-
-  private afterRequest(url: string, response: http.HttpResponse){
-    console.dir(response)
-    this.requestMap.delete(url)
   }
 }
 export default new HttpRequest()

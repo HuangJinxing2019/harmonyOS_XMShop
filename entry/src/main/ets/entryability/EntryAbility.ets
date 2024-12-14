@@ -22,15 +22,17 @@ export default class EntryAbility extends UIAbility {
         hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return;
       }
+      let windowClass: window.Window = windowStage.getMainWindowSync(); // 获取应用主窗口
+      windowClass.setWindowLayoutFullScreen(true)
+      window.getLastWindow(this.context, (err, windowClass) => {
+        console.log('获取状态栏信息-系统默认区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)))
+        console.log('获取状态栏信息-系统默认区域' + vp2px(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM).topRect.height))
+        // console.log('获取状态栏信息-刘海屏高度' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_CUTOUT)))
+        // console.log('获取状态栏信息-手势区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM_GESTURE)))
+        // console.log('获取状态栏信息-导航条区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)))
+      })
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
     });
-    window.getLastWindow(this.context, (err, windowClass) => {
-      console.log('获取状态栏信息-系统默认区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)))
-      console.log('获取状态栏信息-系统默认区域' + vp2px(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM).topRect.height))
-      // console.log('获取状态栏信息-刘海屏高度' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_CUTOUT)))
-      // console.log('获取状态栏信息-手势区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM_GESTURE)))
-      // console.log('获取状态栏信息-导航条区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)))
-    })
   }
 
   onWindowStageDestroy(): void {

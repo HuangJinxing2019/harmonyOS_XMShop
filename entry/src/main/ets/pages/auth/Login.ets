@@ -11,7 +11,6 @@ export  function LoginBuilder(){
 @ComponentV2
 struct Login{
   @Consumer('NavPathStack') navPageInfos: NavPathStack = new NavPathStack();
-
   build() {
     NavDestination(){
       Column(){

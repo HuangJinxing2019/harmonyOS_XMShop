@@ -1,6 +1,20 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\hjx\\.ohos\\config\\default_harmonyOS_XMShop_QXxgq9Y-97Il57HlwRKKlbQyKzd4GAu-i38Qa0LbWSA=.cer",
+          "storePassword": "0000001A1BBFAB7A9F5C4D41CCE7CF29ABF1FC7FE1B28FDB22270458BECF041954135DEC8CB3B2F80C58",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001ACA5D3FD5278F4268BD2FB5B74FC73DA2A748130218019FD65D79F9711C363B5A8D63A1063EF9",
+          "profile": "C:\\Users\\hjx\\.ohos\\config\\default_harmonyOS_XMShop_QXxgq9Y-97Il57HlwRKKlbQyKzd4GAu-i38Qa0LbWSA=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\hjx\\.ohos\\config\\default_harmonyOS_XMShop_QXxgq9Y-97Il57HlwRKKlbQyKzd4GAu-i38Qa0LbWSA=.p12"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",

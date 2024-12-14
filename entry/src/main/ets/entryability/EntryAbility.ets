@@ -2,6 +2,7 @@ import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.Ab
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { customThemeColor } from '../config/theme_config'
+import appStore from '../store/AppStore'
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -25,11 +26,14 @@ export default class EntryAbility extends UIAbility {
       let windowClass: window.Window = windowStage.getMainWindowSync(); // 获取应用主窗口
       windowClass.setWindowLayoutFullScreen(true)
       window.getLastWindow(this.context, (err, windowClass) => {
-        console.log('获取状态栏信息-系统默认区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)))
-        console.log('获取状态栏信息-系统默认区域' + vp2px(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM).topRect.height))
-        // console.log('获取状态栏信息-刘海屏高度' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_CUTOUT)))
-        // console.log('获取状态栏信息-手势区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM_GESTURE)))
-        // console.log('获取状态栏信息-导航条区域' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)))
+        const topRect = windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM).topRect
+        topRect.height = px2vp(topRect.height)
+        const bottomRect = windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR).bottomRect
+        console.log('TYPE_NAVIGATION_INDICATOR' + JSON.stringify(windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)))
+        bottomRect.height = px2vp(bottomRect.height)
+        console.log('TYPE_NAVIGATION_INDICATOR' + bottomRect.height)
+        appStore.topRect = topRect;
+        appStore.bottomRect = bottomRect;
       })
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
     });

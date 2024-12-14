@@ -1,3 +1,4 @@
+import appStore from '../../store/AppStore'
 @ComponentV2
 export struct Home {
   aboutToAppear(): void {
@@ -10,7 +11,7 @@ export struct Home {
     Column() {
       Column()
         .width('100%')
-        .height('126px')
+        .height(appStore.topRect?.height)
         .backgroundColor(Color.Blue)
       Text('首页')
     }

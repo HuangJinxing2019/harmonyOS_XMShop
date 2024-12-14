@@ -3,6 +3,7 @@ import { Home } from '../components/toobar/Home'
 import { My } from '../components/toobar/My'
 import { PRIMARY_COLOR } from '../config/style_config'
 import { navigationInterception } from '../libs/utils'
+import appStore from '../store/AppStore'
 
 @Entry
 @ComponentV2
@@ -45,7 +46,10 @@ struct Index {
     Image($$.active ? $$.activeIcon : $$.icon)
       .width(32)
       .height(32)
-    Text($$.text)
+    Text($$.text + appStore.bottomRect?.height)
       .fontColor($$.active ? PRIMARY_COLOR : Color.Gray)
+    Row().height(appStore.bottomRect?.height)
+      .width('100%')
+      .backgroundColor(Color.White)
   }
 }
